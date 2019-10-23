@@ -1,4 +1,5 @@
 from random import randint
+import random
 import math
 
 class Population:
@@ -20,7 +21,33 @@ class Population:
 
 
     def crossover(self):
-        return self
+        individualsAfterCrossover = []
+        individualsCopy = self.individuals.copy()
+
+        while (len(individualsCopy) > 0):
+            probability = randint(0, 100)
+
+            individual1 = random.choice(individualsCopy)
+            individualsCopy.remove(individual1)
+            individual2 = random.choice(individualsCopy)
+            individualsCopy.remove(individual2)
+
+            if (probability < self.crossoverRate):
+                tailSize = randint(1, 4)
+
+                tailIndividual1 = individual1[-tailSize:]
+                individual1 = individual1[:-tailSize]
+
+                tailIndividual2 = individual2[-tailSize:]
+                individual2 = individual2[:-tailSize]
+
+                individual1 += tailIndividual2
+                individual2 += tailIndividual1
+            
+            individualsAfterCrossover.append(individual1)
+            individualsAfterCrossover.append(individual2)
+
+        return individualsAfterCrossover
 
 
     def mutation(self):
