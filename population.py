@@ -20,19 +20,59 @@ class Population:
             self.fitness.append(self.calculateFitnessOfOneIndividual(number))
 
 
-    def crossover(self):
-        individualsAfterCrossover = []
+    def parentSelection(self):
+        selecteds = []
+
+        numberOfSelected = randint(self.numberOfIndividuals / 2, self.numberOfIndividuals)
+        if ((numberOfSelected % 2) != 0):
+            numberOfSelected += 1
+
         individualsCopy = self.individuals.copy()
+        fitnessCopy = self.fitness.copy()
 
-        while (len(individualsCopy) > 0):
-            probability = randint(0, 100)
+        while (len(selecteds) < numberOfSelected):
+            individualsCopy2 = individualsCopy.copy()
+            fitnessCopy2 = fitnessCopy.copy()
 
-            individual1 = random.choice(individualsCopy)
-            individualsCopy.remove(individual1)
-            individual2 = random.choice(individualsCopy)
-            individualsCopy.remove(individual2)
+            participants = []
+            participantsFitness = []
+        
+            numberOfParticipants = randint(1, len(individualsCopy2))
 
-            if (probability < self.crossoverRate):
+            for i in range(numberOfParticipants):
+                posParticipant = randint(0, len(individualsCopy2) - 1)
+                participants.append(individualsCopy2[posParticipant])
+                participantsFitness.append(fitnessCopy2[posParticipant])
+                individualsCopy2.pop(posParticipant)
+                fitnessCopy2.pop(posParticipant)
+            
+            bestFound = participants[0]
+            bestFitnessFound = participantsFitness[0]
+
+            for i in range(numberOfParticipants):
+                if (participantsFitness[i] > bestFitnessFound):
+                    bestFitnessFound = participantsFitness[i]
+            
+            selecteds.append(bestFound)
+
+            individualsCopy.remove(bestFound)
+            fitnessCopy.remove(bestFitnessFound)
+
+        return selecteds
+
+
+    def crossover(self, selecteds):
+        selectedsAfterCrossover = []
+
+        while (len(selecteds) > 0):
+            probability = randint(1, 100)
+
+            individual1 = random.choice(selecteds)
+            selecteds.remove(individual1)
+            individual2 = random.choice(selecteds)
+            selecteds.remove(individual2)
+
+            if (probability <= self.crossoverRate):
                 tailSize = randint(1, 4)
 
                 tailIndividual1 = individual1[-tailSize:]
@@ -44,18 +84,35 @@ class Population:
                 individual1 += tailIndividual2
                 individual2 += tailIndividual1
             
-            individualsAfterCrossover.append(individual1)
-            individualsAfterCrossover.append(individual2)
+            selectedsAfterCrossover.append(individual1)
+            selectedsAfterCrossover.append(individual2)
 
-        return individualsAfterCrossover
-
-
-    def mutation(self):
-        return self
+        return selectedsAfterCrossover
 
 
-    def selection(self):
-        return self
+    def mutation(self, selecteds):
+        for i in range(len(selecteds)):
+            for j in range(5):
+                probability = randint(1, 100)
+                if (probability <= self.mutationRate):
+                    if (selecteds[i][j] == 1):
+                        selecteds[i][j] = 0
+                    else:
+                        selecteds[i][j] = 1
+
+        self.arrangeIntoLimits(selecteds)
+        return selecteds
+
+
+    def arrangeIntoLimits(self, selecteds):
+        for i in range(len(selecteds)):
+            number = self.convertBinaryToDecimal(selecteds[i])
+            limits = range(self.startX, self.endX)
+
+            if (number not in limits):
+                selecteds[i] = self.convertDecimalToBinary(randint(-10, 10))
+        
+        return selecteds
 
 
     def findBest(self, currentBest):
@@ -70,6 +127,16 @@ class Population:
     def printPopulation(self):
         for i in range(self.numberOfIndividuals):
             print(self.convertBinaryToDecimal(self.individuals[i]), "  ", self.individuals[i], "  ", self.fitness[i])
+
+
+    def repopulation(self, selecteds):
+        self.individuals.clear()
+
+        self.individuals = selecteds
+
+        for i in range(len(selecteds), self.numberOfIndividuals):
+            number = randint(self.startX, self.endX)
+            self.individuals.append(self.convertDecimalToBinary(number))
 
 
     def calculateFitness(self):
