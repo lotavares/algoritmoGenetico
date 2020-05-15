@@ -26,6 +26,6 @@ GA()
 
 #### Resultados
 
-Nos resultados, tem-se a população inicial e a população final (após a execução do algoritmo genético), em cada uma dessas, há um decimal, o binário e o valor fitness (de acordo com a função) do decimal. A última linha apresenta a melhor solução encontrada, composta pelo decimal e o binário do mesmo.
+Nos resultados, tem-se a população inicial e a população final (após a execução do algoritmo genético), em cada uma dessas, há um decimal, o binário e o valor fitness (de acordo com a função) do decimal. A última linha apresenta a melhor solução encontrada, composta pelo decimal e o valor de *x* em binário.
 
 Copyright (c) 2019 Lorena Kerollen Botelho Tavares
