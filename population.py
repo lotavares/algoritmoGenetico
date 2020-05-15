@@ -125,8 +125,10 @@ class Population:
 
 
     def printPopulation(self):
+        print("\n\ndecimal        binario        fitness")
         for i in range(self.numberOfIndividuals):
-            print(self.convertBinaryToDecimal(self.individuals[i]), "  ", self.individuals[i], "  ", self.fitness[i])
+            print(self.convertBinaryToDecimal(self.individuals[i]), "        ", self.individuals[i], "     ", self.fitness[i])
+        print("\n\n")
 
 
     def repopulation(self, selecteds):
