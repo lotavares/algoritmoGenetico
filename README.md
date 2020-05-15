@@ -1,6 +1,6 @@
 ### Algoritmo Genético
 
-O problema proposto é maximizar a função *f(x) = x * x - 3x + 4*. No código implementado, *x* é considerado número inteiro.
+O problema proposto é maximizar a função *f(x) = x * x - 3x + 4*, *x* é considerado número inteiro.
 
 
 #### Implementação e Execução
